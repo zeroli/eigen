@@ -30,7 +30,7 @@
  *
  * If we made alignment depend on whether or not EIGEN_VECTORIZE is defined, it would be impossible to link
  * vectorized and non-vectorized code.
- * 
+ *
  * FIXME: this code can be cleaned up once we switch to proper C++11 only.
  */
 #if (defined EIGEN_CUDACC)
@@ -62,10 +62,10 @@
   #else
     #define EIGEN_IDEAL_MAX_ALIGN_BYTES 0
   #endif
-#elif defined(__AVX512F__)
+#elif defined(__AVX512F__)  // 当开启了-mavx512f，GCC会定义这个
   // 64 bytes static alignment is preferred only if really required
   #define EIGEN_IDEAL_MAX_ALIGN_BYTES 64
-#elif defined(__AVX__)
+#elif defined(__AVX__)  // 当开启了编译选项-march=native(on avx machine), GCC会定义这个
   // 32 bytes static alignment is preferred only if really required
   #define EIGEN_IDEAL_MAX_ALIGN_BYTES 32
 #else
@@ -241,8 +241,8 @@
       #define EIGEN_VECTORIZE_SSE4_2
     #endif
     #ifdef __AVX__
-      #ifndef EIGEN_USE_SYCL 
-        #define EIGEN_VECTORIZE_AVX
+      #ifndef EIGEN_USE_SYCL
+        #define EIGEN_VECTORIZE_AVX  // *** 这里找到定以AVX vectorize的配置
       #endif
       #define EIGEN_VECTORIZE_SSE3
       #define EIGEN_VECTORIZE_SSSE3
@@ -250,7 +250,7 @@
       #define EIGEN_VECTORIZE_SSE4_2
     #endif
     #ifdef __AVX2__
-      #ifndef EIGEN_USE_SYCL 
+      #ifndef EIGEN_USE_SYCL
         #define EIGEN_VECTORIZE_AVX2
         #define EIGEN_VECTORIZE_AVX
       #endif
@@ -323,7 +323,7 @@
       // NOTE using -macosx-version-min=10.14 produces functioning and passing tests in all cases
       // NOTE __clang_version__ "11.0.0 (clang-1100.0.33.8)"  XCode 11.0 <- Produces many segfault and core dumping tests
       //                                                                    with  -macosx-version-min=10.15 and AVX
-      // NOTE __clang_version__ "11.0.0 (clang-1100.0.33.12)" XCode 11.2 <- Produces 3 core dumping tests with  
+      // NOTE __clang_version__ "11.0.0 (clang-1100.0.33.12)" XCode 11.2 <- Produces 3 core dumping tests with
       //                                                                    -macosx-version-min=10.15 and AVX
     #endif
 
